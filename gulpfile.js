@@ -2,6 +2,8 @@
  * Gulp file to automate the various tasks
  */
 
+
+const sass = require('gulp-sass')(require('sass'));
 const autoprefixer = require('gulp-autoprefixer');
 const browserSync = require('browser-sync').create();
 const cleanCss = require('gulp-clean-css');
@@ -10,7 +12,6 @@ const htmlmin = require('gulp-htmlmin');
 const cssbeautify = require('gulp-cssbeautify');
 const npmDist = require('gulp-npm-dist');
 const gulp = require('gulp');
-const sass = require('gulp-sass');
 const wait = require('gulp-wait');
 const sourcemaps = require('gulp-sourcemaps');
 const fileinclude = require('gulp-file-include');
