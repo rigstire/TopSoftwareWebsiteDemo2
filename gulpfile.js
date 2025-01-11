@@ -426,3 +426,5 @@ gulp.task('build:dist', gulp.series('clean:dist', 'copy:dist:css', 'copy:dist:ht
 
 // Default
 gulp.task('default', gulp.series('serve'));
+
+gulp.task('build', gulp.series('build:dev')); // Or use 'build:dist' for production
