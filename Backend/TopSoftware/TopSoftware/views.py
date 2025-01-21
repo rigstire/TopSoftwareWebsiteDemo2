@@ -23,5 +23,5 @@ def submit_form(request):
         Preferred Date: {date}
         Preferred Time: {time}
         """
-        send_mail(subject, body, 'your-email@example.com', ['your-email@example.com'])
+        send_mail(subject, body, 'officialtopsoftware@gmail.com', ['officialtopsoftware@gmail.com'])
         return JsonResponse({'status': 'success', 'message': 'Form submitted successfully!'})

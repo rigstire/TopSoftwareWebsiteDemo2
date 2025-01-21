@@ -45,7 +45,7 @@ INSTALLED_APPS = [
 ] 
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  # React development server
+    "http://topsoftware.tech",  # React development server
 ]
 CORS_ALLOW_ALL_ORIGINS = True
 
