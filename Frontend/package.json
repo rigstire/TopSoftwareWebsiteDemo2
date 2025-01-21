@@ -18,7 +18,7 @@
     },
     "license": "Creative Tim",
     "devDependencies": {
-        "browser-sync": "2.26.7",
+        "browser-sync": "^2.26.7",
         "del": "4.1.1",
         "gulp": "4.0.2",
         "gulp-autoprefixer": "6.1.0",
@@ -34,7 +34,8 @@
         "gulp-sourcemaps": "2.6.5",
         "gulp-uglify": "3.0.2",
         "gulp-wait": "0.0.2",
-        "merge-stream": "2.0.0"
+        "merge-stream": "2.0.0",
+        "sass": "^1.83.1"
     },
     "dependencies": {
         "@fortawesome/fontawesome-free": "5.11.2",
@@ -49,5 +50,14 @@
         "smooth-scroll": "16.1.0",
         "sticky-sidebar": "3.3.1",
         "waypoints": "4.0.1"
+    },
+    "scripts": {
+        "start": "gulp serve",
+        "build": "gulp build:dist",
+        "build:dev": "gulp build:dev",
+        "build:dist": "gulp build:dist",
+        "lint": "gulp lint-scss",
+        "clean": "gulp clean:dist",
+        "test": "echo \"No tests specified\" && exit 0"
     }
 }
