@@ -1,0 +1,72 @@
+name: Django CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main  # Specify the branch to trigger on
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  # Job for setting up Python environment and installing dependencies
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Check out the code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Python environment
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'  # Specify the version of Python you are using
+
+      # Step 3: Install Pipenv
+      - name: Install Pipenv
+        run: pip install pipenv
+
+      # Step 4: Install dependencies using Pipenv
+      - name: Install dependencies
+        run: pipenv install --deploy
+
+      # Step 5: Run migrations (if needed for deployment)
+      - name: Run migrations
+        run: pipenv run python manage.py migrate
+
+      # Step 6: Run tests (optional but recommended)
+      - name: Run tests
+        run: pipenv run python manage.py test
+
+  # Job for deploying to your hosting platform (Heroku, DigitalOcean, etc.)
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      # Step 1: Check out the code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Python environment
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      # Step 3: Install Pipenv
+      - name: Install Pipenv
+        run: pip install pipenv
+
+      # Step 4: Install dependencies using Pipenv
+      - name: Install dependencies
+        run: pipenv install --deploy
+
+      # Step 5: Deploy to Heroku
+      - name: Deploy to Heroku
+        uses: akshnz/heroku-deploy-action@v2
+        with:
+          heroku_email: ${{ secrets.HEROKU_EMAIL }}
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: "topsoftware"
