@@ -1,1 +1,1 @@
-web: python -m waitress --listen=0.0.0.0:5000 topsoftware.wsgi:application
+web: waitress-serve --host=0.0.0.0 --port=8000 Backend.topsoftware.wsgi:application
