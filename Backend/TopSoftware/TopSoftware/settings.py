@@ -153,3 +153,4 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'officialtopsoftware@gmail.com'
 EMAIL_HOST_PASSWORD = 'awcd wuxq qkzm dajb' 
+ASGI_APPLICATION = "your_project.asgi.application"
