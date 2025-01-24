@@ -60,7 +60,6 @@
         "build:dist": "gulp build:dist",
         "lint": "gulp lint-scss",
         "clean": "gulp clean:dist",
-        "test": "echo \"No tests specified\" && exit 0",
-  
+        "test": "echo \"No tests specified\" && exit 0"
     }
 }
