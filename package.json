@@ -54,12 +54,13 @@
     },
     "scripts": {
         "start": "gulp serve",
+        "postinstall": "npm install -g gulp-cli",
         "build": "gulp build:dist",
         "build:dev": "gulp build:dev",
         "build:dist": "gulp build:dist",
         "lint": "gulp lint-scss",
         "clean": "gulp clean:dist",
         "test": "echo \"No tests specified\" && exit 0",
-        "postinstall": "npm install -g gulp-cli"
+  
     }
 }
