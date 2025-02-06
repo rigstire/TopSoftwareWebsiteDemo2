@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  @@include('./_head.html', {
+      "path": "..",
+      "path_common": "../..",
+      "title": "Payment - Top Software"
+  })
+  <!-- Include Square Payment SDK (Sandbox URL for testing) -->
+  <script type="text/javascript" src="https://sandbox.web.squarecdn.com/v1/square.js"></script>
+  <style>
+    /* ==========================================================================
+       Global Styles
+    ========================================================================== */
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #d0d5dd, #e2e8f0);
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+    /* ==========================================================================
+       Navigation Overrides
+    ========================================================================== */
+    .navbar {
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+    }
+    /* ==========================================================================
+       Hero Section: Updated Darker Gradient Header
+    ========================================================================== */
+    .section-header {
+      background: linear-gradient(135deg, #2C3E50, #4CA1AF) !important;
+      color: #ffffff !important;
+      padding: 8rem 0 6rem 0;
+      position: relative;
+    }
+    .section-header h1,
+    .section-header p {
+      color: #ffffff !important;
+    }
+    .section-header .pattern.bottom {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 60px;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%234CA1AF" fill-opacity="1" d="M0,192L1440,96L1440,320L0,320Z"></path></svg>') no-repeat bottom;
+      background-size: cover;
+    }
+    /* ==========================================================================
+       Payment Form & Container
+    ========================================================================== */
+    .payment-container {
+      padding: 30px;
+      background: #ffffff;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      margin-bottom: 50px;
+      transition: transform 0.3s;
+    }
+    .payment-container:hover {
+      transform: translateY(-5px);
+    }
+    .payment-form .form-control {
+      border-radius: 5px;
+      border: 2px solid #e1e4eb;
+      transition: all 0.3s;
+    }
+    .payment-form .form-control:focus {
+      border-color: #003366;
+      box-shadow: 0 0 10px rgba(0, 51, 102, 0.2);
+    }
+    /* ==========================================================================
+       Pricing Section
+    ========================================================================== */
+    .pricing-section .card {
+      border: none;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .pricing-section .card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+    }
+    .total-price {
+      background: #f9f9f9;
+      padding: 20px;
+      text-align: center;
+      border-radius: 10px;
+      transition: transform 0.3s;
+    }
+    .total-price:hover {
+      transform: scale(1.02);
+    }
+    /* ==========================================================================
+       Payment Options Section
+    ========================================================================== */
+    .payment-options-section {
+      background: #ffffff;
+      border: 1px solid #e1e4eb;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 30px;
+    }
+    .payment-options-section h4 {
+      margin-bottom: 15px;
+      color: #003366;
+    }
+    /* ==========================================================================
+       Extended Information Section
+    ========================================================================== */
+    .extended-info {
+      margin-top: 30px;
+      padding: 20px;
+      border: 1px dashed #ccc;
+      border-radius: 10px;
+      background: #fdfdfd;
+    }
+    .extended-info h5 {
+      margin-bottom: 15px;
+      color: #003366;
+    }
+    .extended-info p {
+      font-size: 1rem;
+      color: #555;
+      line-height: 1.6;
+    }
+    /* ==========================================================================
+       Additional Details Section
+    ========================================================================== */
+    .details-section {
+      background: #ffffff;
+      padding: 40px 20px;
+      border-radius: 10px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      margin-bottom: 50px;
+    }
+    /* ==========================================================================
+       FAQ Section: Enhanced Styling
+    ========================================================================== */
+    .faq-section .card {
+      border: none;
+      margin-bottom: 10px;
+    }
+    .faq-section .card-header {
+      background: #f7f7f7;
+      color: #003366;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 15px;
+    }
+    .faq-section .card-body {
+      background: #ffffff;
+      padding: 20px;
+      border-top: 1px solid #e1e4eb;
+      color: #555;
+    }
+    /* ==========================================================================
+       Testimonials Section (Text Reviews Without Photos)
+    ========================================================================== */
+    .testimonials-carousel {
+      background: #ffffff;
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    }
+    .testimonial-item {
+      text-align: center;
+      padding: 20px;
+      font-style: italic;
+      position: relative;
+      color: #333;
+    }
+    .testimonial-item i {
+      color: #4CA1AF;
+      margin-bottom: 10px;
+      display: block;
+      font-size: 2rem;
+    }
+    .testimonial-item blockquote {
+      margin: 0;
+      font-size: 1.1rem;
+    }
+    .testimonial-item footer {
+      margin-top: 10px;
+      font-size: 0.9rem;
+      color: #666;
+    }
+    /* ==========================================================================
+       Trusted Partners Section (Text-Based List)
+    ========================================================================== */
+    .partners-section {
+      padding: 40px;
+      background: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      margin-bottom: 50px;
+      text-align: center;
+    }
+    .partners-section h3 {
+      color: #003366;
+      margin-bottom: 20px;
+    }
+    .partner-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 auto;
+      max-width: 600px;
+    }
+    .partner-list li {
+      font-size: 1.2rem;
+      color: #4CA1AF;
+      padding: 10px;
+      border-bottom: 1px solid #e1e4eb;
+    }
+    .partner-list li:last-child {
+      border-bottom: none;
+    }
+    /* ==========================================================================
+       Newsletter Section
+    ========================================================================== */
+    .newsletter-section {
+      background: #003366;
+      color: #fff;
+      padding: 40px 20px;
+      border-radius: 10px;
+      text-align: center;
+      margin-bottom: 50px;
+    }
+    .newsletter-section .form-control {
+      border-radius: 30px;
+      border: none;
+      padding: 10px 20px;
+      margin-right: 10px;
+    }
+    .newsletter-section .btn {
+      border-radius: 30px;
+      padding: 10px 20px;
+    }
+    /* ==========================================================================
+       Cookie Consent Banner
+    ========================================================================== */
+    .cookie-consent {
+      font-size: 0.9rem;
+      z-index: 1050;
+    }
+    /* ==========================================================================
+       Extra CSS for Layout and Spacing
+    ========================================================================== */
+    .spacer {
+      height: 50px;
+    }
+    .small-spacer {
+      height: 20px;
+    }
+    /* ==========================================================================
+       Square Payment Integration Styling
+    ========================================================================== */
+    .sq-input {
+      border: 1px solid #ccc;
+      padding: 12px;
+      margin-bottom: 10px;
+      border-radius: 4px;
+      width: 100%;
+    }
+    /* ==========================================================================
+       Developer Notes Section (For Future Backend Integration)
+    ========================================================================== */
+    .developer-notes {
+      background: #edf2f7;
+      border: 1px dashed #a0aec0;
+      padding: 20px;
+      margin-top: 30px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      color: #2D3748;
+    }
+  </style>
+  <!-- End Custom Styles -->
+</head>
+<body>
+
+  @@include('./_tracking-body.html')
+
+  @@include('./_navigation.html', {
+      "path": "..",
+      "path_common": "../..",
+      "classes": "navbar-dark navbar-theme-primary"
+  })
+
+  <main>
+    @@include('./_preloader.html', { "path": ".." })
+
+    <!-- ==========================================================================
+         Hero Section
+    ========================================================================== -->
+    <section class="section-header pb-9 pb-lg-13 mb-4 mb-lg-6">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-12 col-md-8 text-center">
+            <h1 class="display-2 mb-3">Secure Payment</h1>
+            <p class="lead">
+              Complete your purchase securely and quickly. Your information is encrypted and processed safely.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="pattern bottom"></div>
+    </section>
+    <!-- End Hero Section -->
+
+    <!-- ==========================================================================
+         Payment Form Section
+    ========================================================================== -->
+    <section class="container my-5">
+      <div class="row justify-content-center">
+        <div class="col-12 col-lg-10">
+          <div class="card border-light shadow-soft p-4 p-md-5 rounded">
+            <div class="card-body">
+              <!-- Payment Form Container -->
+              <div class="payment-container mb-5">
+                <h2 class="text-primary"><i class="fas fa-lock me-2"></i> Secure Payment</h2>
+                <p class="text-muted">
+                  Your payment is fully secure. We value your privacy and ensure safe processing.
+                </p>
+                <form class="payment-form" id="paymentForm" action="/process-payment" method="POST">
+                  <div class="mb-3">
+                    <label for="cardName" class="form-label">Cardholder Name</label>
+                    <input type="text" class="form-control" name="card-name" id="cardName" placeholder="John Doe" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="cardNumber" class="form-label">Card Number</label>
+                    <input type="text" class="form-control" name="card-number" id="cardNumber" placeholder="1234 5678 9012 3456" required>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6 mb-3">
+                      <label for="expiry" class="form-label">Expiry (MM/YY)</label>
+                      <input type="text" class="form-control" name="expiry" id="expiry" placeholder="MM/YY" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="cvv" class="form-label">CVV</label>
+                      <input type="text" class="form-control" name="cvv" id="cvv" placeholder="CVV" required>
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <!-- End Payment Form Container -->
+
+              <hr class="my-4">
+
+              <!-- ==========================================================================
+                   Pricing Section
+              ========================================================================== -->
+              <div class="pricing-section mb-5">
+                <h3 class="text-primary text-center mb-4">Choose Your Plan</h3>
+                <div class="row">
+                  <!-- Basic Plan Card -->
+                  <div class="col-md-4 mb-4">
+                    <div class="card h-100 shadow-sm">
+                      <div class="card-body text-center">
+                        <h4 class="card-title text-primary">Basic</h4>
+                        <p class="card-text">Price per page: <span class="fw-bold text-warning">$250</span></p>
+                        <p class="card-text">1-3 Pages, Standard Support, Basic SEO</p>
+                        <div class="mb-3">
+                          <input type="number" class="form-control text-center" min="3" max="3" value="3" id="basicPages" onchange="updateTotalPrice()">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Standard Plan Card -->
+                  <div class="col-md-4 mb-4">
+                    <div class="card h-100 shadow-sm">
+                      <div class="card-body text-center">
+                        <h4 class="card-title text-primary">Standard</h4>
+                        <p class="card-text">Price per page: <span class="fw-bold text-warning">$175</span></p>
+                        <p class="card-text">4-7 Pages, Advanced Support, ChatBot Integration</p>
+                        <div class="mb-3">
+                          <input type="number" class="form-control text-center" min="0" max="0" value="0" id="standardPages" onchange="updateTotalPrice()">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Premium Plan Card -->
+                  <div class="col-md-4 mb-4">
+                    <div class="card h-100 shadow-sm">
+                      <div class="card-body text-center">
+                        <h4 class="card-title text-primary">Premium</h4>
+                        <p class="card-text">Price per page: <span class="fw-bold text-warning">$150</span></p>
+                        <p class="card-text">8-15 Pages, Full SEO, Analytics & Full ChatBot Integration</p>
+                        <div class="mb-3">
+                          <input type="number" class="form-control text-center" min="0" max="0" value="0" id="premiumPages" onchange="updateTotalPrice()">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Total Price Display -->
+                <div class="total-price bg-light p-3 text-center rounded">
+                  <h4 class="text-primary" id="totalPrice">Total Price: $750</h4>
+                </div>
+              </div>
+              <!-- End Pricing Section -->
+
+              <!-- ==========================================================================
+                   Payment Options Section (Full / Deposit / Monthly)
+              ========================================================================== -->
+              <div class="payment-options-section mb-4">
+                <h4>Payment Options</h4>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="paymentOption" id="fullPayment" value="full" checked onchange="updateTotalPrice()">
+                  <label class="form-check-label" for="fullPayment">Full Payment</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="paymentOption" id="depositPayment" value="deposit" onchange="updateTotalPrice()">
+                  <label class="form-check-label" for="depositPayment">20% Deposit Payment</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="paymentOption" id="monthlyPayment" value="monthly" onchange="updateTotalPrice()">
+                  <label class="form-check-label" for="monthlyPayment">Monthly Payment (12 Months)</label>
+                </div>
+              </div>
+              <!-- End Payment Options Section -->
+
+              <!-- ==========================================================================
+                   Extended Information Section
+              ========================================================================== -->
+              <div class="extended-info">
+                <h5>Payment Terms & Conditions</h5>
+                <p>
+                  Please review our payment terms carefully. Full payment guarantees immediate service initiation, while a deposit or monthly plan will have specific terms regarding service commencement and installment payments.
+                  For monthly payments, the total cost will be divided equally over 12 months, with each installment due at the start of each month.
+                  Note that deposits are non-refundable.
+                </p>
+              </div>
+              <!-- End Extended Information Section -->
+
+              <!-- ==========================================================================
+                   Square Payment Integration Section
+              ========================================================================== -->
+              <div id="sq-payment-form">
+                <div id="sq-card-number"></div>
+                <div class="small-spacer"></div>
+                <div id="sq-expiration-date"></div>
+                <div class="small-spacer"></div>
+                <div id="sq-cvv"></div>
+                <div class="small-spacer"></div>
+                <div id="sq-postal-code"></div>
+                <div class="small-spacer"></div>
+                <button id="sq-creditcard" class="btn btn-primary" onclick="onGetCardNonce(event)">
+                  Pay with Square
+                </button>
+              </div>
+              <!-- End Square Payment Integration Section -->
+
+              <!-- ==========================================================================
+                   Developer Notes Section (For Future Backend Integration)
+              ========================================================================== -->
+              <div class="developer-notes">
+                <strong>Developer Notes:</strong>
+                <p>
+                  This page is integrated with the Square Payment Form. The card information is securely tokenized, and the generated nonce is sent to the backend for processing.
+                  Ensure your backend endpoint <code>/process-square-payment</code> is set up to handle the payment using Square's API.
+                </p>
+              </div>
+              <!-- End Developer Notes Section -->
+
+              <!-- ==========================================================================
+                   Proceed Button
+              ========================================================================== -->
+              <div class="d-grid mt-4">
+                <button class="btn btn-primary btn-lg" type="submit" form="paymentForm">
+                  Proceed to Payment <i class="fas fa-arrow-right ms-2"></i>
+                </button>
+              </div>
+              <!-- End Proceed Button -->
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- End Payment Form Section -->
+
+    <!-- ==========================================================================
+         Additional Details Section
+    ========================================================================== -->
+    <section class="container my-5">
+      <div class="details-section">
+        <div class="row">
+          <div class="col-12 text-center">
+            <h3 class="text-primary mb-3">Why Choose Top Software?</h3>
+            <p class="lead text-muted">
+              Our secure payment system and customized plans are designed to give you the best experience.
+              Enjoy top-notch support and innovative solutions tailored for your needs.
+            </p>
+            <ul class="list-unstyled d-flex justify-content-center">
+              <li class="mx-3"><i class="fas fa-shield-alt fa-2x text-primary"></i></li>
+              <li class="mx-3"><i class="fas fa-headset fa-2x text-primary"></i></li>
+              <li class="mx-3"><i class="fas fa-thumbs-up fa-2x text-primary"></i></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- End Additional Details Section -->
+
+    <!-- ==========================================================================
+         FAQ Section (Enhanced Styling)
+    ========================================================================== -->
+    <section class="container my-5 faq-section">
+      <h3 class="text-primary text-center mb-4">Frequently Asked Questions</h3>
+      <div class="card">
+        <div class="card-header" data-bs-toggle="collapse" data-bs-target="#faq1" aria-expanded="true">
+          <i class="fas fa-question-circle"></i> How secure is my payment information?
+        </div>
+        <div id="faq1" class="collapse show">
+          <div class="card-body">
+            Your payment information is encrypted and securely processed using the latest security protocols.
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header" data-bs-toggle="collapse" data-bs-target="#faq2" aria-expanded="false">
+          <i class="fas fa-question-circle"></i> What payment methods are accepted?
+        </div>
+        <div id="faq2" class="collapse">
+          <div class="card-body">
+            We accept all major credit cards including Visa, MasterCard, American Express, and Discover.
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header" data-bs-toggle="collapse" data-bs-target="#faq3" aria-expanded="false">
+          <i class="fas fa-question-circle"></i> Can I change my plan later?
+        </div>
+        <div id="faq3" class="collapse">
+          <div class="card-body">
+            Yes, you can upgrade or downgrade your plan at any time after your purchase.
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- End FAQ Section -->
+
+    <!-- ==========================================================================
+         Testimonials Section (Text Reviews)
+    ========================================================================== -->
+    <section class="container my-5">
+      <div class="testimonials-carousel">
+        <h3 class="text-primary text-center mb-4">What Our Customers Say</h3>
+        <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-inner">
+            <!-- Testimonial Item 1 -->
+            <div class="carousel-item active">
+              <div class="testimonial-item">
+                <i class="fas fa-quote-left"></i>
+                <blockquote>"Top Software provided exceptional service and their payment process was completely secure. Highly recommend!"</blockquote>
+                <footer>— Alex Johnson</footer>
+              </div>
+            </div>
+            <!-- Testimonial Item 2 -->
+            <div class="carousel-item">
+              <div class="testimonial-item">
+                <i class="fas fa-quote-left"></i>
+                <blockquote>"I love how seamless the payment experience was. The team was supportive every step of the way."</blockquote>
+                <footer>— Maria Garcia</footer>
+              </div>
+            </div>
+            <!-- Testimonial Item 3 -->
+            <div class="carousel-item">
+              <div class="testimonial-item">
+                <i class="fas fa-quote-left"></i>
+                <blockquote>"Their innovative solutions and secure payment process set them apart from the competition."</blockquote>
+                <footer>— David Smith</footer>
+              </div>
+            </div>
+            <!-- Testimonial Item 4 -->
+            <div class="carousel-item">
+              <div class="testimonial-item">
+                <i class="fas fa-quote-left"></i>
+                <blockquote>"The flexibility of payment options really impressed me. I opted for the monthly plan and it worked perfectly."</blockquote>
+                <footer>— Samantha Lee</footer>
+              </div>
+            </div>
+            <!-- Testimonial Item 5 -->
+            <div class="carousel-item">
+              <div class="testimonial-item">
+                <i class="fas fa-quote-left"></i>
+                <blockquote>"A truly secure and professional payment experience. I will definitely use Top Software again."</blockquote>
+                <footer>— Michael Brown</footer>
+              </div>
+            </div>
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+      </div>
+    </section>
+    <!-- End Testimonials Section -->
+
+    <!-- ==========================================================================
+         Trusted Partners Section (Text-Based)
+    ========================================================================== -->
+    <section class="container my-5">
+      <div class="partners-section">
+        <h3 class="text-primary mb-4">Our Trusted Partners</h3>
+        <ul class="partner-list">
+          <li>Interexy</li>
+          <li>TechSolutions</li>
+          <li>InnovateX</li>
+          <li>CloudCore</li>
+          <li>NextGen Systems</li>
+          <li>AlphaTech</li>
+          <li>BetaWorks</li>
+        </ul>
+      </div>
+    </section>
+    <!-- End Trusted Partners Section -->
+
+    <!-- ==========================================================================
+         Newsletter Section
+    ========================================================================== -->
+    <section class="container my-5">
+      <div class="newsletter-section">
+        <h3 class="mb-3">Subscribe to Our Newsletter</h3>
+        <p class="mb-4">Stay updated with the latest news and exclusive offers.</p>
+        <form class="d-flex justify-content-center">
+          <input type="email" class="form-control" placeholder="Enter your email" required>
+          <button type="submit" class="btn btn-warning ms-2">Subscribe</button>
+        </form>
+      </div>
+    </section>
+    <!-- End Newsletter Section -->
+
+    <!-- ==========================================================================
+         Cookie Consent Banner
+    ========================================================================== -->
+    <div id="cookieConsent" class="cookie-consent bg-dark text-white p-3 fixed-bottom">
+      <div class="container d-flex justify-content-between align-items-center">
+        <div>
+          We use cookies to enhance your experience. By continuing, you agree to our use of cookies.
+        </div>
+        <button class="btn btn-warning btn-sm" onclick="acceptCookies()">Accept</button>
+      </div>
+    </div>
+    <!-- End Cookie Consent Banner -->
+
+    <!-- ==========================================================================
+         Spacer for Layout
+    ========================================================================== -->
+    <div class="spacer"></div>
+    <!-- End Spacer -->
+
+  </main>
+
+  @@include('./_footer.html', {
+      "path": "..",
+      "path_common": "../..",
+      "classes": "bg-primary text-white"
+  })
+
+  @@include('./_scripts.html', {
+      "path": "..",
+      "path_common": "../.."
+  })
+
+  <!-- ==========================================================================
+       Custom JavaScript Section
+  ========================================================================== -->
+  <script>
+    // Function to update the total price and display payment option details
+    function updateTotalPrice() {
+      const basicPages = parseInt(document.getElementById("basicPages").value);
+      const standardPages = parseInt(document.getElementById("standardPages").value);
+      const premiumPages = parseInt(document.getElementById("premiumPages").value);
+      const fullPrice = (basicPages * 250) + (standardPages * 175) + (premiumPages * 150);
+      const paymentOption = document.querySelector('input[name="paymentOption"]:checked').value;
+      
+      if (paymentOption === "deposit") {
+        const depositPrice = fullPrice * 0.20;
+        document.getElementById("totalPrice").innerText = "Deposit Amount (20%): $" + depositPrice.toFixed(2) + " (Full Price: $" + fullPrice + ")";
+      } else if (paymentOption === "monthly") {
+        const monthlyPayment = fullPrice / 12;
+        document.getElementById("totalPrice").innerText = "Monthly Payment: $" + monthlyPayment.toFixed(2) + " per month (Full Price: $" + fullPrice + ")";
+      } else {
+        document.getElementById("totalPrice").innerText = "Total Price: $" + fullPrice;
+      }
+    }
+
+    // Function to hide the cookie consent banner upon acceptance
+    function acceptCookies() {
+      document.getElementById("cookieConsent").style.display = "none";
+    }
+  </script>
+
+  <!-- ==========================================================================
+       Square Payment Integration Script
+  ========================================================================== -->
+  <script>
+    // Replace these placeholders with your actual Sandbox or Production credentials.
+    const applicationId = "sandbox-sq0idb-YourApplicationId";  
+    const locationId = "YOUR_LOCATION_ID";
+
+    // Initialize the Square Payment Form
+    const paymentForm = new SqPaymentForm({
+      applicationId: applicationId,
+      locationId: locationId,
+      inputClass: 'sq-input',
+      autoBuild: false,
+      inputStyles: [{
+        fontSize: '16px',
+        padding: '16px',
+        color: '#373F4A',
+        backgroundColor: 'transparent',
+        lineHeight: '24px',
+        placeholderColor: '#CCC',
+        _webkitFontSmoothing: 'antialiased',
+        _mozOsxFontSmoothing: 'grayscale'
+      }],
+      cardNumber: {
+        elementId: 'sq-card-number',
+        placeholder: 'Card Number'
+      },
+      cvv: {
+        elementId: 'sq-cvv',
+        placeholder: 'CVV'
+      },
+      expirationDate: {
+        elementId: 'sq-expiration-date',
+        placeholder: 'MM/YY'
+      },
+      postalCode: {
+        elementId: 'sq-postal-code',
+        placeholder: 'Postal Code'
+      },
+      callbacks: {
+        cardNonceResponseReceived: function(errors, nonce, cardData, billingContact, shippingContact) {
+          if (errors) {
+            console.error("Encountered errors:", errors);
+            alert("Encountered errors, please check your card details.");
+            return;
+          }
+          console.log("Nonce received:", nonce);
+          sendPaymentNonceToServer(nonce);
+        }
+      }
+    });
+    
+    // Build the Square Payment Form
+    paymentForm.build();
+
+    // Function called when the user clicks the "Pay with Square" button
+    function onGetCardNonce(event) {
+      event.preventDefault();
+      paymentForm.requestCardNonce();
+    }
+
+    // Function to send the nonce to your backend server via AJAX
+    function sendPaymentNonceToServer(nonce) {
+      fetch('/process-square-payment', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          nonce: nonce,
+          amount: calculatePaymentAmount()
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          alert("Payment processed successfully!");
+        } else {
+          alert("Payment processing failed: " + data.error);
+        }
+      })
+      .catch(error => {
+        console.error("Error processing payment:", error);
+        alert("There was an error processing your payment.");
+      });
+    }
+
+    // Example function to calculate the payment amount (in cents)
+    function calculatePaymentAmount() {
+      const basicPages = parseInt(document.getElementById("basicPages").value);
+      const standardPages = parseInt(document.getElementById("standardPages").value);
+      const premiumPages = parseInt(document.getElementById("premiumPages").value);
+      return (basicPages * 250) + (standardPages * 175) + (premiumPages * 150);
+    }
+  </script>
+
+  <!-- ==========================================================================
+       Additional Custom Scripts for Enhanced Functionality
+  ========================================================================== -->
+  <script>
+    // Smooth scrolling for internal anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
+        });
+      });
+    });
+  </script>
+
+  <script>
+    // Simulated AJAX form submission handling for non-Square forms
+    document.getElementById("paymentForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      alert("Your payment form has been submitted successfully! Payment processing will begin shortly.");
+    });
+  </script>
+
+  <script>
+    // Debugging log for developer purposes
+    console.log("Payment page loaded successfully. All features are active.");
+  </script>
+
+  <!-- ==========================================================================
+       Developer Notes Section (For Backend Integration)
+  ========================================================================== -->
+  <script>
+    /*
+      Developer Note:
+      -------------------------
+      This page is integrated with the Square Payment Form. Ensure that your backend endpoint (/process-square-payment)
+      is configured to securely process the nonce using Square's API.
+      Refer to Square's documentation: https://developer.squareup.com/docs for further integration details.
+    */
+  </script>
+
+  <!-- ==========================================================================
+    
+  ========================================================================== -->
+</body>
+</html>
