@@ -1,4 +1,5 @@
 [build]
-  environment = { PYTHON_VERSION = "3.9.7" }
+  environment = { PYTHON_VERSION = "3.12.9" }
   command = "gulp build:dist"
   publish = "dist"
+
